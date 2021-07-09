@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.drt.mapper.GoodsMapper">
+	<resultMap id="BaseResultMap" type="com.drt.entity.Goods">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="goods_name" property="goodsName"
+			jdbcType="VARCHAR" />
+		<result column="goods_price" property="goodsPrice"
+			jdbcType="DECIMAL" />
+		<result column="goods_sales" property="goodsSales"
+			jdbcType="INTEGER" />
+		<result column="goods_stock" property="goodsStock"
+			jdbcType="INTEGER" />
+		<result column="goods_img_path" property="goodsImgPath"
+			jdbcType="VARCHAR" />
+		<result column="goods_category" property="goodsCategory"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, goods_name, goods_price, goods_sales, goods_stock, goods_img_path,
+		goods_category
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.drt.entity.GoodsExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<!-- List<Goods> selectGoodsListByKeyword(String keyword); -->
+	<select id="selectGoodsListByKeyword" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_goods
+		WHERE
+		goods_name LIKE CONCAT("%", #{keyword}, "%")
+		OR goods_category LIKE CONCAT("%", #{keyword}, "%")
+		order by id desc
+	</select>
+	
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_goods
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from t_goods
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.drt.entity.GoodsExample">
+		delete from t_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.drt.entity.Goods">
+		insert into t_goods (id, goods_name, goods_price,
+		goods_sales, goods_stock, goods_img_path,
+		goods_category)
+		values (#{id,jdbcType=INTEGER}, #{goodsName,jdbcType=VARCHAR},
+		#{goodsPrice,jdbcType=DECIMAL},
+		#{goodsSales,jdbcType=INTEGER}, #{goodsStock,jdbcType=INTEGER}, #{goodsImgPath,jdbcType=VARCHAR},
+		#{goodsCategory,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.drt.entity.Goods">
+		insert into t_goods
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="goodsName != null">
+				goods_name,
+			</if>
+			<if test="goodsPrice != null">
+				goods_price,
+			</if>
+			<if test="goodsSales != null">
+				goods_sales,
+			</if>
+			<if test="goodsStock != null">
+				goods_stock,
+			</if>
+			<if test="goodsImgPath != null">
+				goods_img_path,
+			</if>
+			<if test="goodsCategory != null">
+				goods_category,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="goodsName != null">
+				#{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsPrice != null">
+				#{goodsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsSales != null">
+				#{goodsSales,jdbcType=INTEGER},
+			</if>
+			<if test="goodsStock != null">
+				#{goodsStock,jdbcType=INTEGER},
+			</if>
+			<if test="goodsImgPath != null">
+				#{goodsImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsCategory != null">
+				#{goodsCategory,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.drt.entity.GoodsExample"
+		resultType="java.lang.Integer">
+		select count(*) from t_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_goods
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsName != null">
+				goods_name = #{record.goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsPrice != null">
+				goods_price = #{record.goodsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.goodsSales != null">
+				goods_sales = #{record.goodsSales,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsStock != null">
+				goods_stock = #{record.goodsStock,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsImgPath != null">
+				goods_img_path = #{record.goodsImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsCategory != null">
+				goods_category = #{record.goodsCategory,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_goods
+		set id = #{record.id,jdbcType=INTEGER},
+		goods_name = #{record.goodsName,jdbcType=VARCHAR},
+		goods_price = #{record.goodsPrice,jdbcType=DECIMAL},
+		goods_sales = #{record.goodsSales,jdbcType=INTEGER},
+		goods_stock = #{record.goodsStock,jdbcType=INTEGER},
+		goods_img_path = #{record.goodsImgPath,jdbcType=VARCHAR},
+		goods_category = #{record.goodsCategory,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.drt.entity.Goods">
+		update t_goods
+		<set>
+			<if test="goodsName != null">
+				goods_name = #{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsPrice != null">
+				goods_price = #{goodsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsSales != null">
+				goods_sales = #{goodsSales,jdbcType=INTEGER},
+			</if>
+			<if test="goodsStock != null">
+				goods_stock = #{goodsStock,jdbcType=INTEGER},
+			</if>
+			<if test="goodsImgPath != null">
+				goods_img_path = #{goodsImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsCategory != null">
+				goods_category = #{goodsCategory,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.drt.entity.Goods">
+		update t_goods
+		set goods_name = #{goodsName,jdbcType=VARCHAR},
+		goods_price = #{goodsPrice,jdbcType=DECIMAL},
+		goods_sales = #{goodsSales,jdbcType=INTEGER},
+		goods_stock = #{goodsStock,jdbcType=INTEGER},
+		goods_img_path = #{goodsImgPath,jdbcType=VARCHAR},
+		goods_category = #{goodsCategory,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
